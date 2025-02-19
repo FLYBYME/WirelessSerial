@@ -1,4 +1,3 @@
-
 # WirelessSerial
 
 WirelessSerial is a project that implements a wireless communication system using the NRF24L01+ radio module. The project is designed to provide reliable and efficient wireless communication between devices.
@@ -96,9 +95,87 @@ void loop() {
 }
 ```
 
+### Additional Examples
+
+Here are some additional examples to help you understand how to use the `ModemNRF24` class effectively:
+
+#### Example 1: Setting Bitrate, Power, and Channel
+
+```cpp
+#include <Arduino.h>
+#include "modem/NRF24.h"
+
+ModemNRF24 modem(9, 10);
+
+void setup() {
+  Serial.begin(9600);
+  if (!modem.init()) {
+    Serial.println("Failed to initialize modem");
+    while (1);
+  }
+
+  // Set bitrate to medium
+  modem.setBiteRate(Modem::MODEM_BITE_RATE_MEDIUM);
+
+  // Set power to high
+  modem.setPower(Modem::MODEM_POWER_HIGH);
+
+  // Set channel to 2
+  modem.setChannel(Modem::MODEM_CHANNEL_2);
+}
+
+void loop() {
+  modem.update();
+
+  if (modem.available()) {
+    int byte = modem.read();
+    Serial.write(byte);
+  }
+
+  if (Serial.available()) {
+    int byte = Serial.read();
+    modem.write(byte);
+  }
+}
+```
+
+#### Example 2: Using Different Modes
+
+```cpp
+#include <Arduino.h>
+#include "modem/NRF24.h"
+
+ModemNRF24 modem(9, 10);
+
+void setup() {
+  Serial.begin(9600);
+  if (!modem.init()) {
+    Serial.println("Failed to initialize modem");
+    while (1);
+  }
+
+  // Set modem to active mode
+  modem.setMode(Modem::MODEM_MODE_ACTIVE);
+}
+
+void loop() {
+  modem.update();
+
+  if (modem.available()) {
+    int byte = modem.read();
+    Serial.write(byte);
+  }
+
+  if (Serial.available()) {
+    int byte = Serial.read();
+    modem.write(byte);
+  }
+}
+```
+
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes. For more details, refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 
